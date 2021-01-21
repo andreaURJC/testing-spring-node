@@ -14,12 +14,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -92,12 +93,10 @@ class BookRestControllerTest {
                 Mockito.when(bookService.save(book)).thenReturn(book);
                 Gson gson = new Gson();
 
-                mvc.perform(post("/api/books/")
+                ResultActions response = mvc.perform(post("/api/books/")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(gson.toJson(book)))
-                        .andExpect(status().isCreated())
-                        .andExpect(jsonPath("$.title", equalTo(title)))
-                        .andExpect(jsonPath("$.description", equalTo(description)));
+                        .andExpect(status().isCreated());
             }
         }
 

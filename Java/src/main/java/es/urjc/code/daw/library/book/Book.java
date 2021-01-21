@@ -55,4 +55,19 @@ public class Book {
 		return "Book [id=" + id + ", title=" + title + ", description=" + description + "]";
 	}
 
+	@Override
+    public boolean equals(Object o) {
+		if (o == this) { 
+			return true; 
+		} 
+
+		if (!(o instanceof Book)) { 
+			return false; 
+		} 
+			
+		Book b = (Book) o; 
+			
+		return b.title.equals(this.title) && b.description.equals(this.description); 
+	}
+
 }
