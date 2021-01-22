@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -97,6 +98,41 @@ class BookRestControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(gson.toJson(book)))
                         .andExpect(status().isCreated());
+            }
+        }
+
+    }
+
+    @Nested
+    @DisplayName("Given user admin logged")
+    class givenLoggedAsAdminUser {
+
+        @Nested
+        @DisplayName("when the user deletes a book")
+        class whenGetAllBooks {
+
+            @Test
+            @DisplayName("then should return ok")
+            @WithMockUser(username = "username", password = "password", roles = "ADMIN")
+            public void thenShouldReturnBook() throws Exception {
+                long id = 1;
+                Mockito.doNothing().when(bookService).delete(id);
+
+                ResultActions response = mvc.perform(delete("/api/books/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk());
+            }
+
+            @Test
+            @DisplayName("then should return ok")
+            @WithMockUser(username = "username", password = "password", roles =  "ADMIN")
+            public void thenShouldThrowException() throws Exception {
+                long id = 2;
+                Mockito.doThrow(EmptyResultDataAccessException.class).when(bookService).delete(id);
+
+                ResultActions response = mvc.perform(delete("/api/books/2")
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isNotFound());
             }
         }
 
