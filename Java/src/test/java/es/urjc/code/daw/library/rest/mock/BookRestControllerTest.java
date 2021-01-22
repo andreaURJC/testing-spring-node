@@ -1,4 +1,4 @@
-package es.urjc.code.daw.library.rest;
+package es.urjc.code.daw.library.rest.mock;
 
 import com.google.gson.Gson;
 import es.urjc.code.daw.library.book.Book;
@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@DisplayName("BookRestControllerTests")
+@DisplayName("Mock BookRestControllerTests")
 class BookRestControllerTest {
 
     @Autowired
@@ -73,7 +73,6 @@ class BookRestControllerTest {
                         .andExpect(jsonPath("$", hasSize(0)));
             }
         }
-
     }
 
     @Nested
@@ -100,7 +99,6 @@ class BookRestControllerTest {
                         .andExpect(status().isCreated());
             }
         }
-
     }
 
     @Nested
