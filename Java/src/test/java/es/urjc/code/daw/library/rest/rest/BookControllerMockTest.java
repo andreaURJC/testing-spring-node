@@ -46,22 +46,37 @@ class BookControllerMockTest {
     }
 
     @Test
+    @DisplayName("Given logged user as role: USER, when creats new book, then should return ok")
     public void givenLoggedUser_whenSaveNewBook_thenShouldReturnOk() {
         given().
                 relaxedHTTPSValidation().
                 auth()
-                    .basic("username", "password").
+                    .basic("user", "pass").
                 contentType("application/json").
                 body("{\"description\":\"description 1\",\"title\":\"New Book 1\" }").
         when().
                 post(baseUrl + "/api/books/").
         then().
-                statusCode(200).
+                statusCode(201).
                 body("title", equalTo("New Book 1"),
                         "description", containsStringIgnoringCase("description 1"));
     }
 
-    public static String encode(String str1, String str2) {
-        return new String(Base64.getEncoder().encode((str1 + ":" + str2).getBytes()));
+    @Test
+    @DisplayName("Given logged user as role: USER, when creats new book, then should return ok")
+    public void givenLoggedUser_whenSaveNewBook_thenShouldReturnOk() {
+        given().
+                relaxedHTTPSValidation().
+                auth()
+                .basic("user", "pass").
+                contentType("application/json").
+                body("{\"description\":\"description 1\",\"title\":\"New Book 1\" }").
+                when().
+                post(baseUrl + "/api/books/").
+                then().
+                statusCode(201).
+                body("title", equalTo("New Book 1"),
+                        "description", containsStringIgnoringCase("description 1"));
     }
+
 }
