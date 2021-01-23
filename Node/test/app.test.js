@@ -2,7 +2,7 @@ const app = require('../src/app');
 const supertest = require('supertest');
 const request = supertest(app);
 
-const film = { name: 'Film 2', year: '1997'}
+const film = { name: 'Dumbo', year: '1997'}
 
 test("Given user, when he creates new film, then the film is saved.", async() => {
  
@@ -10,7 +10,7 @@ test("Given user, when he creates new film, then the film is saved.", async() =>
         .send(film)
         .expect(201)
     
-    expect(response.body.name).toBe('Film 2')
+    expect(response.body.name).toBe('Dumbo')
     expect(response.body.year).toBe('1997')
 })
 
@@ -19,5 +19,8 @@ test("Given user, when he gets all films, then should return all films.", async(
   const response = await request.get('/api/films/')
       .expect(200)
   
-      expect(response.body).toBe('Film 1');
+      expect(response.body[0].name).toBe('Los 101 Dalmatas');
+      expect(response.body[0].year).toBe('1957');
+      expect(response.body[1].name).toBe('El Rey Leon');
+      expect(response.body[1].year).toBe('1998');
 })
