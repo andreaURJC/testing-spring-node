@@ -13,4 +13,13 @@ test("Given user, when he creates new film, then the film is saved.", async() =>
         .expect(201)
     
     expect(response.body.name).toBe('Film 2')
+    expect(response.body.year).toBe('1997')
+})
+
+test("Given user, when he gets all films, then should return all films.", async() => {
+
+  const response = await request.get('/api/films/')
+      .expect(200)
+  
+      expect(response.body).toBe('Film 1');
 })
