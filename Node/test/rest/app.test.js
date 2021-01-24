@@ -4,6 +4,7 @@ const AWS = require('aws-sdk');
 const { GenericContainer } = require('testcontainers');
 const createTableIfNotExist = require('../../src/db/createTable');
 
+jest.setTimeout(10000)
 describe('Integration tests', () => {
   
   let dynamoContainer;
@@ -33,19 +34,22 @@ describe('Integration tests', () => {
 
   const film = { name: 'Dumbo' };
 
-  test('Given user, when he creates new film, then the film is saved.', async () => {
+  test('Given a film, when adding it, then post should return the film created.', async () => {
     const response = await request(app)
       .post('/api/films')
       .send(film)
       .expect(201);
 
     expect(response.body.name).toBe('Dumbo');
-  }, 10000);
+  });
 
-  test('Given user, when he gets all films, then should return all films.', async () => {
-    const response = await request(app).get('/api/films').expect(200);
+  test('Given existing films, when adding a new one, then get should return existing + 1.', async () => {
+    const initialFilms = await request(app).get('/api/films').expect(200)
 
-    //TODO: Comprobar el numero de peliculas antes y después de insertar una
-    expect(response.body[0].name).toBe('Dumbo');
-  }, 10000);
+    await request(app).post('/api/films').send(film).expect(201)
+
+    const endingFilms = await request(app).get('/api/films').expect(200)
+
+    expect(endingFilms.body.length).toBe(initialFilms.body.length + 1);
+  });
 });
